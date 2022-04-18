@@ -196,11 +196,12 @@ mod clinical_trial_data {
         
         // calculates fisher's exact test formulaically
         pub fn binomial(&self, val1: u128, val2: u128) -> u128{
-            self.factorial(val1) / (self.factorial(val2) * self.factorial(&val1 - &val2))
+            let denom:u128 = &val1 - &val2;
+            self.factorial(val1) / (self.factorial(val2) * self.factorial(denom))
         }
 
         // calculates p-value using hypergeometric distribution in fisher's exact test
-        pub fn hypergeom_cdf(&self, population: u128, cured: u128, treatment: u128, observed: u128) -> u128 {
+        pub fn hypergeom_cdf(&self, population: u128, cured: u128, treatment: u128, mut observed: u128) -> u128 {
             let mut hypergeom_sum: u128 = 0;
             while observed <= cured && observed <= treatment{
                 hypergeom_sum += self.binomial(cured, observed)*self.binomial(population-cured, treatment-observed);
@@ -215,8 +216,8 @@ mod clinical_trial_data {
             // 1. read self.data_summary
             let treatment_pos = self.data_summary.get(String::from("Treatment Positive")).unwrap();
             let treatment_neg = self.data_summary.get(String::from("Treatment Negative")).unwrap();
-            let placebo_pos = self.data_summary.get(String::from("Treatment Positive")).unwrap();
-            let placebo_neg = self.data_summary.get(String::from("Treatment Negative")).unwrap();
+            let placebo_pos = self.data_summary.get(String::from("Placebo Positive")).unwrap();
+            let placebo_neg = self.data_summary.get(String::from("Placebo Negative")).unwrap();
             
             // 2. get hypergeomtric parameters
             let population  = treatment_pos + treatment_neg + placebo_pos + placebo_neg;
@@ -269,7 +270,7 @@ mod clinical_trial_data {
                 ("440", "Placebo", "No"), ("23", "Treatment", "Yes"), ("24", "Treatment", "Yes"), 
                 ("25", "Treatment", "Yes"), ("26", "Treatment", "Yes"), ("27", "Treatment", "Yes"), 
                 ("28", "Treatment", "Yes"), ("29", "Treatment", "Yes"), ("30", "Treatment", "Yes"), 
-                ("31", "Treatment", "Yes"), ("45", "Treatment", "Yes"),("85", "Treatment", "Yes")]
+                ("31", "Treatment", "Yes"), ("45", "Treatment", "Yes"), ("45", "Treatment", "Yes")]
                     .iter()
                     .map(|x| (x.0.to_string(), x.1.to_string(), x.2.to_string()))
                     .collect::<Vec<(String, String, String)>>();
@@ -301,7 +302,7 @@ mod clinical_trial_data {
             
             // test statistical test
             ink_env::debug_println!("p-value: {:?}", research.p_value);
-            assert!(research.result == true);
+            assert!(research.result == false);
         }
 
         #[ink::test]
@@ -318,7 +319,7 @@ mod clinical_trial_data {
                 ("440", "Placebo", "No"), ("23", "Treatment", "Yes"), ("24", "Treatment", "Yes"), 
                 ("25", "Treatment", "Yes"), ("26", "Treatment", "Yes"), ("27", "Treatment", "Yes"), 
                 ("28", "Treatment", "Yes"), ("29", "Treatment", "Yes"), ("30", "Treatment", "Yes"), 
-                ("31", "Treatment", "Yes"), ("45", "Treatment", "Yes"),("85", "Treatment", "Yes")]
+                ("31", "Treatment", "Yes"), ("45", "Treatment", "Yes"), ("46", "Treatment", "Yes")]
                     .iter()
                     .map(|x| (x.0.to_string(), x.1.to_string(), x.2.to_string()))
                     .collect::<Vec<(String, String, String)>>();
@@ -361,7 +362,7 @@ mod clinical_trial_data {
             
             // test statistical test
             ink_env::debug_println!("p-value: {:?}", research.p_value);
-            assert!(research.result == true);
+            assert!(research.result == false);
         }
     }
 }
