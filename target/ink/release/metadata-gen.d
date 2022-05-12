@@ -1,0 +1,1 @@
+/Users/koleebute/phala-network-fat-contract-use-case/target/ink/release/metadata-gen: /Users/koleebute/phala-network-fat-contract-use-case/lib.rs /private/var/folders/77/60ccpy2920sdxtyc8l4yrd840000gn/T/cargo-contract_Zg0nqR/.ink/metadata_gen/main.rs
