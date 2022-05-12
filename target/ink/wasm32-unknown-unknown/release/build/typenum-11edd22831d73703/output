@@ -1,2 +1,0 @@
-cargo:rustc-env=TYPENUM_BUILD_CONSTS=/Users/koleebute/phala-network-fat-contract-use-case/target/ink/wasm32-unknown-unknown/release/build/typenum-11edd22831d73703/out/consts.rs
-cargo:rustc-env=TYPENUM_BUILD_OP=/Users/koleebute/phala-network-fat-contract-use-case/target/ink/wasm32-unknown-unknown/release/build/typenum-11edd22831d73703/out/op.rs
